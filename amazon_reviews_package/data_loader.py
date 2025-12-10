@@ -42,4 +42,3 @@ def carregar_dados():
         print("ERROR: File not found")
 
 
-
