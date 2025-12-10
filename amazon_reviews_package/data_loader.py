@@ -5,7 +5,7 @@ import csv
 
 def carregar_dados():
     # Lista vazia para armazenar os dicionários.(A estrutura final será [ {dados_da_review_1}, {dados_da_review_2}, ... ]
-    dados = []  # <<< Alterado de {} (dicionário) para [] (lista)
+    dados = []
     file_path = "C:\\Users\\rodri\\Documents\\Ficheiro Trabalhos"
     file_name = "Reviews.csv"
 
