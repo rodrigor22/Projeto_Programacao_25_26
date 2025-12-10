@@ -2,7 +2,7 @@
 """O propósito deste ficheiro é carregar o ficheiro CSV (Reviews.py), converter o mesmo numa lista de dicionários e tratar das exceções"""
 import csv
 
-
+"""Esta função tem como objetivo ler o conteúdo do ficheiro CSV e armazená-lo numa lista de dicionários"""
 def carregar_dados():
     # Lista vazia para armazenar os dicionários.(A estrutura final será [ {dados_da_review_1}, {dados_da_review_2}, ... ]
     dados = []
