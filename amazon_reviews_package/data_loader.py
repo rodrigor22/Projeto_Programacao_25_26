@@ -43,11 +43,28 @@ def load_data(file_path):
                             # Conversão para data legível e armazenamento
                             review["Time_Original"] = value
                             review["Time_Date"] = convert_timestamp_to_date(value)
+
+                        #Elifs feitos com listas que contêm strings dadas no enunciado(na parte do DataSet)
+
+                        # Primeiro Elif:
+                        #"Id": Identificador único da avaliação.
+                        #"ProductId": Identificador do produto.
+                        #"UserId": Identificador do utilizador. #ProfileName: Nome do utilizador.
+                        #"Summary": Título da avaliação
+                        #"Text": Texto completo da avaliação
+
                         elif col_name in ["Id", "ProductId", "UserId", "ProfileName", "Summary", "Text"]:
                             review[col_name] = value
+
+                        # Segundo Elif:
+                        #"HelpfulnessNumerator": Número de pessoas que consideraram a avaliação útil.
+                        #"HelpfullnessDenominator": Número total de votos sobre a utilidade da avaliação.
+                        #"Score": Avaliação dada (de 1 a 5 estrelas)
+
                         elif col_name in ["HelpfulnessNumerator", "HelpfulnessDenominator", "Score"]:
                             # Conversão para inteiro (para cálculos futuros)
                             review[col_name] = int(value)
+
                         else:
                             # Capturar outras colunas que possam existir
                             review[col_name] = value
