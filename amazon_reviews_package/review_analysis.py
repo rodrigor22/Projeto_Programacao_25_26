@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Este ficheiro analisa as reviews, calculando as estatísticas das mesmas, como média dos scores através da função "media_avaliações" e a utilidade média de todas as reviews coma função "calcular_utilidade_media"."""
-
+"""Análise de Avaliações"""
+"""Este ficheiro analisa as reviews, calculando as estatísticas das mesmas"""
 """Esta função calcula a média de todos os scores (pontuações) na lista de reviews fornecida."""
 #A função recebe a lista criada pela função criada no ficheiro "data_loader.py"
 def media_avaliacoes(dados):
