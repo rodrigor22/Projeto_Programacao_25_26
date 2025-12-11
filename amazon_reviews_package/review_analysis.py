@@ -35,9 +35,8 @@ def calcular_utilidade_media(dados):
     else:
         # Garante que um valor é sempre devolvido
         return 0.0
+
 """Esta função conta o número de reviews para cada score de 1 a 5."""
-
-
 def contar_distribuicao_scores(dados):
     # Dicionário que armazena a contagem de cada score
     distribuicao = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
