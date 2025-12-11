@@ -26,7 +26,7 @@ def carregar_dados():
                     "UserId": review["UserId"],
                     "ProfileName": review["ProfileName"],
                     "HelpfulnessNumerator": int(review["HelpfulnessNumerator"]),
-                    "HelpfullnessDenominator": int(review["HelpfulnessDenomirator"]),
+                    "HelpfullnessDenominator": int(review["HelpfulnessDenominator"]),
                     "Score": int(review["Score"]),
                     "Time": review["Time"],
                     "Summary": review["Summary"],
