@@ -43,7 +43,7 @@ def contar_distribuicao_scores(dados):
     distribuicao = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
     if not dados:
         return distribuicao
-    # Iterasobre cada review
+    # Itera sobre cada review
     for review in dados:
         #Tira a nota ("Score") de cada review
         score = review.get("Score")
