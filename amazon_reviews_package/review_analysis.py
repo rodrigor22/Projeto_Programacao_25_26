@@ -3,7 +3,7 @@
 
 """Este ficheiro analisa as reviews, calculando as estatísticas das mesmas."""
 
-"""Esta função calcula a média de todos os scores (pontuações) na lista de reviews fornecida."""
+"""Esta função calcula a média de todos os scores na lista de reviews fornecida."""
 #A função recebe a lista criada pela função criada no ficheiro "data_loader.py"
 def media_avaliacoes_geral(dados):
     if not dados:
@@ -80,8 +80,23 @@ def media_scores_por_utilizador(dados):
         soma_scores = scores_totais[user_id]
         contagem_reviews = reviews_contadas[user_id]
         media = soma_scores / contagem_reviews
+        # Armazenamos a média calculada no dicionário final, usando o UserId como chave.
         score_medio_por_user[user_id] = media
     return score_medio_por_user
+
+"""Esta função identifica os produtos com maior número de avaliações com score 5"""
+def avaliacao_maxima (dados):
+    avl_max = {}
+    for review in dados:
+        score = review.get("Score")
+        product_id = review.get("ProductId")
+        if score == 5:
+            #Se a chave existir, soma 1 à contagem. Se for um produto novo, inicia a contagem em 1
+            avl_max[product_id] = avl_max.get(product_id, 0) + 1
+
+    return avl_max
+
+
 
 
 
