@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 """Análise de Avaliações"""
+
 """Este ficheiro analisa as reviews, calculando as estatísticas das mesmas."""
+
 """Esta função calcula a média de todos os scores (pontuações) na lista de reviews fornecida."""
 #A função recebe a lista criada pela função criada no ficheiro "data_loader.py"
-def media_avaliacoes(dados):
+def media_avaliacoes_geral(dados):
     if not dados:
         return 0.0
     # Criamos uma lista através de uma list comprehension apenas dos scores em cada dicionário
@@ -51,3 +53,40 @@ def contar_distribuicao_scores(dados):
             distribuicao[score] += 1
 
     return distribuicao
+
+"""Esta função calcula a media de scores por utilizador"""
+def media_scores_por_utilizador(dados):
+    scores_totais = {}
+    reviews_contadas = {}
+    score_medio_por_user = {}
+
+    for review in dados:
+        # Score atribuido pelo user
+        score = review.get("Score")
+        # Id do user
+        user_id = review.get("UserId")
+
+        # Se o Id do user ja estiver presente na lista scores_totais, soma-se o valor da nova review à antiga e adiciona-se 1 ao número de reviews feitas pelo user
+        if user_id in scores_totais:
+            scores_totais[user_id] += score
+            reviews_contadas[user_id] += 1
+        # Se o Id do user for novo na lista scores_totais, atribui-se o valora da review atual como a única e iguala-se o número de reviews do user a 1
+        else:
+            scores_totais[user_id] = score
+            reviews_contadas[user_id] = 1
+
+    for user_id in scores_totais:
+        # Não necessita de sum pois o ciclo for anterior ja fez a soma dos scores em cada avaliação por user
+        soma_scores = scores_totais[user_id]
+        contagem_reviews = reviews_contadas[user_id]
+        media = soma_scores / contagem_reviews
+        score_medio_por_user[user_id] = media
+    return score_medio_por_user
+
+
+
+
+
+
+
+
