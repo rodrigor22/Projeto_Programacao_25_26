@@ -3,52 +3,6 @@
 
 """Este ficheiro analisa as reviews, calculando as estatísticas das mesmas."""
 
-def media_avaliacoes_geral(dados):
-    """Esta função calcula a média de todos os scores na lista de reviews fornecida.
-    Args:
-        dados ==> lista de dicionários (reviews) (criada pela função presente no data_loader.py)
-    Returns:
-        Média da de todos os scores presentes nas reviews através da divisão entre a soma de todos pela quantidade dos mesmos
-        """
-    if not dados:
-        return 0.0
-    # Criamos uma lista através de uma list comprehension apenas dos scores em cada dicionário
-    scores = [review["Score"] for review in dados]
-    total_score = sum(scores)
-    #A funcão dá-nos a média dos scores somando os valores todos de scores com o "sum(scores)" e divindo pela quantidade de scores existente na lista dado pelo "len(scores)"
-    return total_score / len(dados)
-
-
-def calcular_utilidade_media(dados):
-    """Esta função calcula a utilidade média de todas as reviews
-    Args:
-         dados ==> lista de dicionários (reviews) (criada pela função presente no data_loader.py)
-    Returns:
-        A média de utilidade global (um número entre 0.0 e 1.0)"""
-
-    total_helpfulness_ratio = 0.0
-    valid_reviews_count = 0
-    for review in dados:
-        numerator = review["HelpfulnessNumerator"]
-        denominator = review["HelpfullnessDenominator"]
-
-        if denominator > 0:
-            utilidade_da_review = numerator / denominator
-            # O "total_helpfulless_ratio" simboliza o sumatório de review["HelpfulnessNumerator"]/review["HelpfullnessDenominator"]
-            total_helpfulness_ratio += utilidade_da_review
-            # O "valid_reviews_count" simboliza o número de reviews válidas (que o denomidanor não seja igual a 0)
-            valid_reviews_count += 1
-        # Ignorar reviews quando review["HelpfullnessDenominator"] == 0
-        else:
-            pass
-    if valid_reviews_count > 0:
-        utilidade_media = total_helpfulness_ratio / valid_reviews_count
-        return utilidade_media
-    else:
-        # Garante que um valor é sempre devolvido
-        return 0.0
-
-
 def contar_distribuicao_scores(dados):
     """Esta função conta o número de reviews para cada score de 1 a 5.
     Args:
