@@ -13,8 +13,7 @@ def carregar_dados():
         Uma lista com o formato [ {Review 1}, {Review 2}, ... ], onde cada elemento é um dicionário que representa os dados de
         uma única review."""
 
-    # Lista vazia para armazenar os dicionários.(A estrutura final será [ {dados_da_review_1}, {dados_da_review_2}, ... ]
-    dados = []
+    # Lista vazia para armazenar os dicionários.
     file_path = "C:\\Users\\rodri\\Documents\\Ficheiro Trabalhos"
     file_name = "Reviews.csv"
 

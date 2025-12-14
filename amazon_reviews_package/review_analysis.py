@@ -93,12 +93,14 @@ def media_scores_por_produto(dados):
     for review in dados:
         product_id = review.get("ProductId")
         score = review.get("Score")
-        # Se o Id do Produto já estiver presente no dicionario soma_scores, soma-se o valor da nova review à antiga. Caso o Id do Protudo ser novo no dicionário mantém-se o valor do score obtido
+        # Se o Id do Produto já estiver presente no dicionario soma_scores,
+        # soma-se o valor da nova review à antiga. Caso o Id do Protudo ser novo no dicionário mantém-se o valor do score obtido
         if product_id in soma_scores:
             soma_scores[product_id] += score
         else:
             soma_scores[product_id] = score
-        #Se o Id do Produto já estiver presente no dicionario quantidade_scores, soma-se o 1 ao valor. Caso o Id do Produto ser novo no dicionário o valor mantém-se 1
+        #Se o Id do Produto já estiver presente no dicionario quantidade_scores,
+        # soma-se o 1 ao valor. Caso o Id do Produto ser novo no dicionário o valor mantém-se 1
         if product_id in quantidade_scores:
             quantidade_scores[product_id] += 1
         else:
@@ -109,6 +111,73 @@ def media_scores_por_produto(dados):
         media = soma / contagem
         score_medio_por_produto[product_id] = media
     return score_medio_por_produto
+
+def calculo_score_medio_ponderado(dados):
+    """Esta funcão calcula o score médio ponderado por utilidade da avaliação.
+    Args:
+        dados ==> Lista de dicionários (reviews) (criada pela função presente no data_loader.py)
+    Returns:
+
+        """
+    # Este dicionário irá conter o somatório da soma ponderada de scores (Score * HelpfullnessNumerator)
+    soma_ponderada_scores = {}
+    # Este dicionário irá conter o somatório dos voto uteis (HelpfullnessNumerator)
+    soma_votos_uteis = {}
+
+    for review in dados:
+        score_str = review.get("Score")
+        product_id = review.get("ProductId")
+        votos_uteis_str = review.get("HelpfullnessNumerator")
+        # Conversão de tipos
+        try:
+            score = float(score_str)
+            votos_uteis = int(votos_uteis_str)
+        # No caso da conversão falhar, ignora a review e avança para a próxima.
+        except ValueError:
+            continue
+        # Ignora a review se o Id do Produto estiver em falta ou for inválido.
+        if not product_id:
+            continue
+
+        score_ponderado = score * votos_uteis
+
+        # Se o Id do produto já estiver presente no dicionário "soma_ponderada_scores"
+        # soma-se o valor do score_ponderado ao value já atribuido à key product_id caso contrário o value da key fica igual ao valor do score_ponderado atual
+        if product_id in soma_ponderada_scores:
+            soma_ponderada_scores[product_id] += score_ponderado
+        else:
+            soma_ponderada_scores[product_id] = score_ponderado
+        # Se o Id do produto já estiver presente no dicionário "soma_votos_uteis"
+        # soma-se o valor do votos_uteis ao value já atribuido à key product_id caso contrário o value da key fica igual ao valor de votos_uteis atual
+        if product_id in soma_votos_uteis:
+            soma_votos_uteis[product_id] += votos_uteis
+        else:
+            soma_votos_uteis[product_id] = votos_uteis
+
+    score_medio_ponderado = {}
+
+    for product_id in soma_ponderada_scores:
+        try:
+            media_ponderada = soma_ponderada_scores[product_id] / soma_votos_uteis[product_id]
+        # No caso de a divisão ser feita por zero, ignora o produto e avança para o próximo.
+        except ZeroDivisionError:
+            continue
+
+        # Atribuição do valor
+        score_medio_ponderado[product_id] = media_ponderada
+
+    return score_medio_ponderado
+
+
+
+
+
+
+
+
+
+
+
 
 
 
