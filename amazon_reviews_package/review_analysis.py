@@ -27,7 +27,7 @@ def contar_distribuicao_scores(dados):
     return distribuicao
 
 def media_scores_por_utilizador(dados):
-    """Esta função calcula a media de scores por utilizador
+    """Esta função calcula a media de avaliações por utilizador
     Args:
     dados ==> Lista de dicionários (reviews) (criada pela função presente no data_loader.py)
 
@@ -44,11 +44,11 @@ def media_scores_por_utilizador(dados):
         # Id do user
         user_id = review.get("UserId")
 
-        # Se o Id do user ja estiver presente na lista scores_totais, soma-se o valor da nova review à antiga e adiciona-se 1 ao número de reviews feitas pelo user
+        # Se o Id do user ja estiver presente no dicionario scores_totais, soma-se o valor da nova review à antiga e adiciona-se 1 ao número de reviews feitas pelo user
         if user_id in scores_totais:
             scores_totais[user_id] += score
             reviews_contadas[user_id] += 1
-        # Se o Id do user for novo na lista scores_totais, atribui-se o valora da review atual como a única e iguala-se o número de reviews do user a 1
+        # Se o Id do user for novo no dicionario scores_totais, atribui-se o valora da review atual como a única e iguala-se o número de reviews do user a 1
         else:
             scores_totais[user_id] = score
             reviews_contadas[user_id] = 1
@@ -78,6 +78,42 @@ def avaliacao_maxima (dados):
             avl_max[product_id] = avl_max.get(product_id, 0) + 1
 
     return avl_max
+
+def media_scores_por_produto(dados):
+    """Esta função calcula a media de scores por produto
+    Args:
+        dados ==> Lista de dicionários (reviews) (criada pela função presente no data_loader.py)
+    Returns:
+        Dicionário no formato score_media_por_produto = {productid (em str) : score (em float)},
+        sendo a key do dicionário o id do produto e o value atribuido a essa key a media de scores atribuida esse produto"""
+    soma_scores = {}
+    quantidade_scores = {}
+    score_medio_por_produto = {}
+
+    for review in dados:
+        product_id = review.get("ProductId")
+        score = review.get("Score")
+        # Se o Id do Produto já estiver presente no dicionario soma_scores, soma-se o valor da nova review à antiga. Caso o Id do Protudo ser novo no dicionário mantém-se o valor do score obtido
+        if product_id in soma_scores:
+            soma_scores[product_id] += score
+        else:
+            soma_scores[product_id] = score
+        #Se o Id do Produto já estiver presente no dicionario quantidade_scores, soma-se o 1 ao valor. Caso o Id do Produto ser novo no dicionário o valor mantém-se 1
+        if product_id in quantidade_scores:
+            quantidade_scores[product_id] += 1
+        else:
+            quantidade_scores[product_id] = 1
+    for product_id in soma_scores:
+        soma = soma_scores[product_id]
+        contagem = quantidade_scores[product_id]
+        media = soma / contagem
+        score_medio_por_produto[product_id] = media
+    return score_medio_por_produto
+
+
+
+
+
 
 
 
