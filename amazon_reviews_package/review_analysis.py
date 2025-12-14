@@ -167,30 +167,3 @@ def calculo_score_medio_ponderado(dados):
         score_medio_ponderado[product_id] = media_ponderada
 
     return score_medio_ponderado
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
