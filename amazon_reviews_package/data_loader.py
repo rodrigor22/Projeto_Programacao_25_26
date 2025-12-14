@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Leitura de Dados,Exceções e Logs"""
+"""Leitura de Dados"""
 
 """O propósito deste ficheiro é carregar o ficheiro CSV (Reviews.py), converter o mesmo numa lista de dicionários e tratar das exceções e logs"""
 
