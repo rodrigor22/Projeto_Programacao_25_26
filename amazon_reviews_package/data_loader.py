@@ -18,14 +18,14 @@ def carregar_dados():
     file_name = "Reviews.csv"
 
     try:
-        # Abertura do ficheiro no modo de leitura ("r")
-        with open(file_path + file_name, "r", encoding="utf-8") as file:
+        with open(file_path + "\\" + file_name, "r", encoding="utf-8") as file:
             reader = csv.DictReader(file)
+            dados = []
 
             for review in reader:
                 # Conversão de tipos de dados
-                # "HelpfullnessNumerator":Número de pessoas que consideraram a avaliação útil.(conversão de string para int)
-                # "HelpfullnessDenominator":Número total de votos sobre a utilidade da avaliação.(conversão de string para int)
+                # "HelpfulnessNumerator":Número de pessoas que consideraram a avaliação útil.(conversão de string para int)
+                # "HelpfulnessDenominator":Número total de votos sobre a utilidade da avaliação.(conversão de string para int)
                 #"Score": Avaliação dada (de 1 a 5 estrelas).(conversão de string para int)
                 # Cria o dicionário da review
                 review_dict = {
@@ -33,7 +33,9 @@ def carregar_dados():
                     "ProductId": review["ProductId"],
                     "UserId": review["UserId"],
                     "ProfileName": review["ProfileName"],
+                    # CORREÇÃO: Chave corrigida para 'HelpfulnessNumerator' (uma só 'l')
                     "HelpfulnessNumerator": int(review["HelpfulnessNumerator"]),
+                    # CORREÇÃO: Chave corrigida para 'HelpfulnessDenominator' (uma só 'l')
                     "HelpfullnessDenominator": int(review["HelpfulnessDenominator"]),
                     "Score": int(review["Score"]),
                     "Time": review["Time"],
@@ -48,5 +50,6 @@ def carregar_dados():
 
     except FileNotFoundError:
         print("ERROR: File not found")
-
-
+    except KeyError as e:
+        # Captura o erro de chave (ortografia) e permite que o main o imprima como erro crítico.
+        raise Exception(f"Erro de chave na leitura do CSV: {e}")

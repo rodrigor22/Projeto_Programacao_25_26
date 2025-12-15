@@ -11,7 +11,6 @@ def contar_distribuicao_scores(dados):
     Returns:
         Dicionário no formato {Score (em int): contagem (em int}
         sendo a key do dicionário o Score o value atribuido a essa key é o número de vezes que esse Score é encontrado nas reviews"""
-
     # Dicionário que armazena a contagem de cada score
     distribuicao = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
     if not dados:
@@ -21,35 +20,33 @@ def contar_distribuicao_scores(dados):
         try:
             # Tira a nota ("Score") de cada review
             score = review.get("Score")
+            score = int(score)
             # Verifica se o score é um valor válido (entre 1 e 5) e soma ao value do score no dicionário "distribuição"
             if score in distribuicao:
                 distribuicao[score] += 1
         # Apanha erros se o Score não for um número (str, etc...)
-        except ValueError:
-            print("ERROR: Erro de dados em Score (contagem ignorada)")
+        except (ValueError, TypeError):
             continue
-
-
     return distribuicao
 
 def media_scores_por_utilizador(dados):
     """Esta função calcula a media de avaliações por utilizador
-    Args:
-    dados ==> Lista de dicionários (reviews) (criada pela função presente no data_loader.py)
+       Args:
+       dados ==> Lista de dicionários (reviews) (criada pela função presente no data_loader.py)
 
-    Returns:
-        Dicionário no formato score_medio_por_user = {userid (em str): media (em float)}
-        sendo o userid a key do dicionário que indica o nome do id do utilizador e o valor dessa key a média entre a soma dos scores desse user e as reviews feitas por esse user"""
+       Returns:
+           Dicionário no formato score_medio_por_user = {userid (em str): media (em float)}
+           sendo o userid a key do dicionário que indica o nome do id do utilizador e o valor dessa key a média entre a soma dos scores desse user e as reviews feitas por esse user"""
     scores_totais = {}
     reviews_contadas = {}
     score_medio_por_user = {}
 
     for review in dados:
-        # Score atribuido pelo user
-        score = review.get("Score")
-        # Id do user
-        user_id = review.get("UserId")
-
+        try:
+            score = int(review.get("Score"))
+            user_id = review.get("UserId")
+        except (ValueError, TypeError):
+            continue
         # Se o Id do user ja estiver presente no dicionario scores_totais, soma-se o valor da nova review à antiga e adiciona-se 1 ao número de reviews feitas pelo user
         if user_id in scores_totais:
             scores_totais[user_id] += score
@@ -74,57 +71,68 @@ def avaliacao_maxima (dados):
         dados ==> Lista de dicionários (reviews) (criada pela função presente no data_loader.py)
     Returns:
         Dicionário (avl_max) dos produtos com reviews com 5 de score (contando o número de vezes que cada produto teve score = 5)"""
-
     avl_max = {}
     for review in dados:
-        score = review.get("Score")
-        product_id = review.get("ProductId")
+        try:
+            score = int(review.get("Score"))
+            product_id = review.get("ProductId")
+        except (ValueError, TypeError):
+            continue
         if score == 5:
-            #Se a chave existir, soma 1 à contagem. Se for um produto novo, inicia a contagem em 1
+            # Se a chave existir, soma 1 à contagem. Se for um produto novo, inicia a contagem em 1
             avl_max[product_id] = avl_max.get(product_id, 0) + 1
-
     return avl_max
+
 
 def media_scores_por_produto(dados):
     """Esta função calcula a media de scores por produto
-    Args:
-        dados ==> Lista de dicionários (reviews) (criada pela função presente no data_loader.py)
-    Returns:
-        Dicionário no formato score_media_por_produto = {productid (em str) : score (em float)},
-        sendo a key do dicionário o id do produto e o value atribuido a essa key a media de scores atribuida esse produto"""
+        Args:
+            dados ==> Lista de dicionários (reviews) (criada pela função presente no data_loader.py)
+        Returns:
+            Dicionário no formato score_media_por_produto = {productid (em str) : score (em float)},
+            sendo a key do dicionário o id do produto e o value atribuido a essa key a media de scores atribuida esse produto"""
     soma_scores = {}
     quantidade_scores = {}
     score_medio_por_produto = {}
 
     for review in dados:
-        product_id = review.get("ProductId")
-        score = review.get("Score")
+        try:
+            product_id = review.get("ProductId")
+            score = int(review.get("Score"))
+        except (ValueError, TypeError):
+            continue
+
         # Se o Id do Produto já estiver presente no dicionario soma_scores,
         # soma-se o valor da nova review à antiga. Caso o Id do Protudo ser novo no dicionário mantém-se o valor do score obtido
         if product_id in soma_scores:
             soma_scores[product_id] += score
         else:
             soma_scores[product_id] = score
-        #Se o Id do Produto já estiver presente no dicionario quantidade_scores,
+
+        # Se o Id do Produto já estiver presente no dicionario quantidade_scores,
         # soma-se o 1 ao valor. Caso o Id do Produto ser novo no dicionário o valor mantém-se 1
         if product_id in quantidade_scores:
             quantidade_scores[product_id] += 1
         else:
             quantidade_scores[product_id] = 1
+
     for product_id in soma_scores:
         soma = soma_scores[product_id]
         contagem = quantidade_scores[product_id]
         media = soma / contagem
         score_medio_por_produto[product_id] = media
+    # Não limitamos aqui, devolve todos
     return score_medio_por_produto
+
 
 def calculo_score_medio_ponderado(dados):
     """Esta funcão calcula o score médio ponderado por utilidade da avaliação.
-    Args:
-        dados ==> Lista de dicionários (reviews) (criada pela função presente no data_loader.py)
-    Returns:
+       Args:
+           dados ==> Lista de dicionários (reviews) (criada pela função presente no data_loader.py)
+       Returns:
 
-        """
+           """
+
     # Este dicionário irá conter o somatório da soma ponderada de scores (Score * HelpfullnessNumerator)
     soma_ponderada_scores = {}
     # Este dicionário irá conter o somatório dos voto uteis (HelpfullnessNumerator)
@@ -133,13 +141,13 @@ def calculo_score_medio_ponderado(dados):
     for review in dados:
         score_str = review.get("Score")
         product_id = review.get("ProductId")
-        votos_uteis_str = review.get("HelpfullnessNumerator")
+        votos_uteis_str = review.get("HelpfulnessNumerator")
         # Conversão de tipos
         try:
             score = float(score_str)
             votos_uteis = int(votos_uteis_str)
         # No caso da conversão falhar, ignora a review e avança para a próxima.
-        except ValueError:
+        except (ValueError, TypeError):
             continue
         # Ignora a review se o Id do Produto estiver em falta ou for inválido.
         if not product_id:
@@ -153,6 +161,7 @@ def calculo_score_medio_ponderado(dados):
             soma_ponderada_scores[product_id] += score_ponderado
         else:
             soma_ponderada_scores[product_id] = score_ponderado
+
         # Se o Id do produto já estiver presente no dicionário "soma_votos_uteis"
         # soma-se o valor do votos_uteis ao value já atribuido à key product_id caso contrário o value da key fica igual ao valor de votos_uteis atual
         if product_id in soma_votos_uteis:
@@ -168,7 +177,6 @@ def calculo_score_medio_ponderado(dados):
         # No caso de a divisão ser feita por zero, ignora o produto e avança para o próximo.
         except ZeroDivisionError:
             continue
-
         # Atribuição do valor
         score_medio_ponderado[product_id] = media_ponderada
 
