@@ -18,11 +18,17 @@ def contar_distribuicao_scores(dados):
         return distribuicao
     # Itera sobre cada review
     for review in dados:
-        #Tira a nota ("Score") de cada review
-        score = review.get("Score")
-        # Verifica se o score é um valor válido (entre 1 e 5) e soma ao value do score no dicionário "distribuição"
-        if score in distribuicao:
-            distribuicao[score] += 1
+        try:
+            # Tira a nota ("Score") de cada review
+            score = review.get("Score")
+            # Verifica se o score é um valor válido (entre 1 e 5) e soma ao value do score no dicionário "distribuição"
+            if score in distribuicao:
+                distribuicao[score] += 1
+        # Apanha erros se o Score não for um número (str, etc...)
+        except ValueError:
+            print("ERROR: Erro de dados em Score (contagem ignorada)")
+            continue
+
 
     return distribuicao
 
